@@ -13,3 +13,10 @@ int lightDetect(const int sensorPin)
     int val = analogRead(sensorPin);
     return (100 - map(val, 0, 1023, 0, 100));
 }
+
+//返回当前土壤湿度百分比数值
+int humidityDetect(const int sensorPin)
+{
+    int val = analogRead(sensorPin);
+    return (100 - map(val,humidityInWater,humidityInAir,0,100));
+}
