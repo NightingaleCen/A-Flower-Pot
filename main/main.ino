@@ -12,6 +12,9 @@ void setup(void)
 {
   sht31.begin(SHT31_ADDR);
   u8g2.begin();
+  u8g2.drawXBMP(0, 0, 128, 64, cow);
+  u8g2.sendBuffer();
+  u8g2.clearBuffer();
   loopTime = millis();
 }
 
