@@ -23,9 +23,13 @@ int humidityDetect(const int sensorPin)
     return (100 - map(val, HUMIDITY_IN_WATER, HUMIDITY_IN_AIR, 0, 100));
 }
 
-/*载入安科拉长角牛*/
+/*载入安科拉长角牛并进行初始化*/
 void loadTheCow(U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2)
 {
+    pinMode(WATERING_PIN, OUTPUT);
+    pinMode(LED_PIN, OUTPUT);
+    digitalWrite(WATERING_PIN, HIGH);
+    digitalWrite(LED_PIN, LOW);
 
     u8g2.firstPage();
     do
@@ -33,6 +37,7 @@ void loadTheCow(U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2)
         u8g2.drawXBMP(0, 0, 128, 64, cow);
     } while (u8g2.nextPage());
 }
+
 /*改变单次灌溉时长*/
 void changeWaterDuration(int &waterDuration, int signal, U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2)
 {
@@ -54,9 +59,11 @@ void changeWaterDuration(int &waterDuration, int signal, U8G2_SSD1306_128X64_NON
     do
     {
         u8g2.drawStr(0, 16, "Current Water Duration is:");
-        u8g2.setCursor(60, 32);
+        for (int i = 0; i < waterDuration / ONE_SEC; i++)
+            u8g2.drawBox(13 * i, 25, 10, 20);
+        u8g2.setCursor(37, 60);
         u8g2.print(waterDuration / ONE_SEC, 1);
-        u8g2.drawStr(42, 48, "Seconds");
+        u8g2.drawStr(52, 60, "Seconds");
     } while (u8g2.nextPage());
 }
 
@@ -77,4 +84,10 @@ void displayInf(U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2, Adafruit_SHT31 sht31)
         u8g2.setCursor(85, 60);
         u8g2.print(lightDetect(LIGHT_SENSOR_PIN), 1); //显示环境光强
     } while (u8g2.nextPage());
+
+    /*环境温度高于30度则点亮LED报警*/
+    if (sht31.readTemperature() > 30)
+        digitalWrite(LED_PIN, HIGH);
+    else
+        digitalWrite(LED_PIN, LOW);
 }

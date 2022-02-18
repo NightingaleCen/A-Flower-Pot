@@ -15,12 +15,16 @@
 #define ONE_SEC 1000
 #define SHT31_ADDR 0x44
 
+/*采用的各引脚*/
 #define LIGHT_SENSOR_PIN A0
 #define HUMIDITY_SENSOR_PIN A1
 #define RECV_PIN 2
+#define WATERING_PIN 5
+#define LED_PIN 4
 
-#define HUMIDITY_IN_AIR 500
+#define HUMIDITY_IN_AIR 515
 #define HUMIDITY_IN_WATER 180
+#define WATERING_THRESHOLD 60
 
 /*红外信号*/
 #define INCREASE_SIGNAL 0x15
